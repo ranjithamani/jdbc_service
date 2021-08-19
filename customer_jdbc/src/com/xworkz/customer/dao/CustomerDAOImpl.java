@@ -176,7 +176,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 				CustomerDTO dto = new CustomerDTO(name, from, to, address, married, passportNo,
 						Education.valueOf(education));
 				dto.setId(id);
-				collection.add(dto);
+				if (predicate.test(dto)) {
+					collection.add(dto);
+				}
 
 			}
 		} catch (SQLException e) {

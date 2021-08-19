@@ -1,7 +1,5 @@
 package com.xworkz.customer.service;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -83,6 +81,8 @@ public class CustomerServiceDAOImpl implements CustomerServiceDAO {
 				educationValid = false;
 			}
 			if (nameValid && fromValid && toValid && addressValid && marriedValid && passportValid && educationValid) {
+				dao.save(dto);
+				
 				System.out.println("data is valid returning success");
 				return 1;
 			}
@@ -90,16 +90,19 @@ public class CustomerServiceDAOImpl implements CustomerServiceDAO {
 
 			return 0;
 		}
+
 		return 0;
 	}
 
 	@Override
 	public void validateAndSaveAll(Collection<CustomerDTO> collection) {
 
-		dao.saveAll(collection);
-
+		if (!collection.isEmpty()) {
+			collection.forEach(dto -> {
+				this.validateAndSave(dto);
+			});
+		}
 	}
-
 	@Override
 	public Optional<CustomerDTO> findOne(Predicate<CustomerDTO> predicate) {
 		return dao.findOne(predicate);
